@@ -64,3 +64,14 @@ app.post("/articles", (req, res) => {
 });
 
 //Delete all articles from database
+app.delete("/articles", (req, res) => {
+    Articles.deleteMany({})
+        .then(() => {
+            console.log("All articles deleted successfully");
+            res.send("All articles deleted successfully");
+        })
+        .catch((error) => {
+            console.log(`Error: ${error}`);
+            res.send("Error deleting all articles");
+        });
+});
