@@ -75,3 +75,77 @@ app.delete("/articles", (req, res) => {
             res.send("Error deleting all articles");
         });
 });
+
+// Get a specific Article
+app
+    .route("/articles/:articleTitle")
+    .get((req, res) => {
+        Articles.findOne({ title: req.params.articleTitle })
+            .then((article) => {
+                console.log(
+                    `Article with id : ${req.params.article} gets successfully`
+                );
+                console.log(article);
+                res.send(article);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    })
+
+.delete((req, res) => {
+    Articles.deleteOne({ title: req.params.articleTitle })
+        .then(() => {
+            console.log(
+                `Article with title : ${req.body.title} deleted successfully`
+            );
+            res.send("Article deleted successfully");
+        })
+        .catch((err) => {
+            console.log(err);
+            res.send(err);
+        });
+})
+
+.put((req, res) => {
+        //req.params.:(id,name, etc) uses for getting the id update and delete or read it
+        Articles.updateOne({ title: req.params.articleTitle },
+                //req.body.(id,name, object_name etc) is used to update the  new values
+                { title: req.body.title, content: req.body.content }, { overwrite: true }
+            )
+            .then((article) => {
+                console.log(
+                    `Article with title : ${req.params.article} updated successfully`
+                );
+                console.log(article);
+                res.send(article);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    })
+    .patch((req, res) => {
+        Articles.updateOne({ title: req.params.articleTitle },
+                // Syntax is         {$set: { value1:, value2:,}}
+                // { $set: { title: } }
+                // OR
+                //this allows the user to change in the fields which he wants
+                { $set: req.body }
+            )
+            .then((article) => {
+                console.log(
+                    `Article with title : ${req.body.title} updated successfully`
+                );
+                res.send(article);
+            })
+            .catch((err) => {
+                console.log(err);
+                res.send(err);
+            });
+    });
+
+//Routing Method
+// app.route("/articles")     // for routing the path
+// .get()
+// .delete()
+// .post
